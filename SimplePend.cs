@@ -26,7 +26,7 @@ namespace Sim
         }
 
         //--------------------------------------------------------------------
-        // step: perform one integration step via Euler's Method
+        // step: perform one integration step via Euler's Method`
         //--------------------------------------------------------------------
         public void step(double dt)
         {
@@ -46,6 +46,42 @@ namespace Sim
         {
             ff[0] = st[1];
             ff[1] = -g/len * Math.Sin(st[0]);
+        }
+
+        //--------------------------------------------------------------------
+        // rk4: function to calculate the next value of pendulum using fourth 
+        //      order runge-kutta 
+        //--------------------------------------------------------------------
+
+        public void rk4(double dt)
+        {
+            double[] k = new double[4];
+            double[] c = new double[2];
+
+            
+            for(int i = 0;i<n;i++)
+            {
+                rhsFunc(x,f);
+                k[0] = f[i];
+
+                c[1] = x[1];
+                c[0] = x[0]+0.5*k[0]*dt;
+                rhsFunc(c,f);
+                k[1] = f[i];
+
+                c[1] = x[1];
+                c[0] = x[0]+0.5*k[1]*dt;
+                rhsFunc(c,f);
+                k[2] = f[i];
+
+                c[1] = x[1];
+                c[0] = x[0]+k[2]*dt;
+                rhsFunc(c,f);
+                k[3] = f[i];
+                
+                //x[i] = x[i] + (dt/6)*(k[0]+2*k[1]+2*k[2]+k[3])*dt;
+                x[i] = x[i] + (dt/6)*(k[0]+2*k[1]+2*k[2]+k[3]);
+            }
         }
 
         //--------------------------------------------------------------------

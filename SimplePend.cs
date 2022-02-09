@@ -65,21 +65,19 @@ namespace Sim
                 k[0] = f[i];
 
                 c[1] = x[1];
+                
                 c[0] = x[0]+0.5*k[0]*dt;
                 rhsFunc(c,f);
                 k[1] = f[i];
 
-                c[1] = x[1];
                 c[0] = x[0]+0.5*k[1]*dt;
                 rhsFunc(c,f);
                 k[2] = f[i];
 
-                c[1] = x[1];
                 c[0] = x[0]+k[2]*dt;
                 rhsFunc(c,f);
                 k[3] = f[i];
                 
-                //x[i] = x[i] + (dt/6)*(k[0]+2*k[1]+2*k[2]+k[3])*dt;
                 x[i] = x[i] + (dt/6)*(k[0]+2*k[1]+2*k[2]+k[3]);
             }
         }

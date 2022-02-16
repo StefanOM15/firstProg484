@@ -55,31 +55,38 @@ namespace Sim
 
         public void rk4(double dt)
         {
-            double[] k = new double[4];
-            double[] c = new double[2];
+            double[][] k = new double[4][];
+            k[0] = new double[n];
+            k[1] = new double[n];
+            k[2] = new double[n];
+            k[3] = new double[n];
+            double[] xi = new double[n];
 
-            
+
+            rhsFunc(x,k[0]);
             for(int i = 0;i<n;i++)
             {
-                rhsFunc(x,f);
-                k[0] = f[i];
-
-                c[1] = x[1];
-                
-                c[0] = x[0]+0.5*k[0]*dt;
-                rhsFunc(c,f);
-                k[1] = f[i];
-
-                c[0] = x[0]+0.5*k[1]*dt;
-                rhsFunc(c,f);
-                k[2] = f[i];
-
-                c[0] = x[0]+k[2]*dt;
-                rhsFunc(c,f);
-                k[3] = f[i];
-                
-                x[i] = x[i] + (dt/6)*(k[0]+2*k[1]+2*k[2]+k[3]);
+                xi[i] = x[i]+0.5*k[0][i]*dt;
             }
+
+            rhsFunc(xi,k[1]);
+            for(int i = 0;i<n;i++)
+            {
+                xi[i] = x[i]+0.5*k[1][i]*dt;
+            }
+
+            rhsFunc(xi,k[2]);
+            for(int i = 0;i<n;i++)
+            {
+                xi[i] = x[i]+k[2][i]*dt;
+            }
+
+            rhsFunc(xi,k[3]);
+            for(int i = 0;i<n;i++)
+            {
+                x[i] = x[i] + (dt/6.0)*(k[0][i]+2.0*k[1][i]+2.0*k[2][i]+k[3][i]);
+            }
+
         }
 
         //--------------------------------------------------------------------
